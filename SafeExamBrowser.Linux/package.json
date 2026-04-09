@@ -1,0 +1,17 @@
+{
+  "name": "safe-exam-browser-linux",
+  "version": "4.0.0",
+  "description": "Safe Exam Browser for Linux (Electron Shell)",
+  "main": "src/index.js",
+  "author": "Rocket Space",
+  "license": "GPL-3.0",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder -l"
+  },
+  "devDependencies": {
+    "electron": "^34.0.0",
+    "electron-builder": "^25.1.8"
+  }
+}

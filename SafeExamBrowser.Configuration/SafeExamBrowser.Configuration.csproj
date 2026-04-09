@@ -10,5 +10,8 @@
   <ItemGroup>
     <ProjectReference Include="..\SafeExamBrowser.Configuration.Contracts\SafeExamBrowser.Configuration.Contracts.csproj" />
     <ProjectReference Include="..\SafeExamBrowser.Settings\SafeExamBrowser.Settings.csproj" />
+    <ProjectReference Include="..\SafeExamBrowser.Logging.Contracts\SafeExamBrowser.Logging.Contracts.csproj" />
+    <ProjectReference Include="..\SafeExamBrowser.I18n.Contracts\SafeExamBrowser.I18n.Contracts.csproj" />
+    <ProjectReference Include="..\SafeExamBrowser.Integrity.Contracts\SafeExamBrowser.Integrity.Contracts.csproj" />
   </ItemGroup>
 </Project>

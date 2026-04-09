@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2026 ETH Zürich, IT Services
  * 
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -10,11 +10,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+#if WINDOWS
 using System.Management;
 using System.Windows.Forms;
+using BatteryChargeStatus = System.Windows.Forms.BatteryChargeStatus;
+#endif
 using SafeExamBrowser.SystemComponents.Contracts;
 using SafeExamBrowser.SystemComponents.Contracts.Registry;
-using BatteryChargeStatus = System.Windows.Forms.BatteryChargeStatus;
 using OperatingSystem = SafeExamBrowser.SystemComponents.Contracts.OperatingSystem;
 
 namespace SafeExamBrowser.SystemComponents
@@ -63,10 +65,14 @@ namespace SafeExamBrowser.SystemComponents
 
 		private void InitializeBattery()
 		{
+#if WINDOWS
 			var status = SystemInformation.PowerStatus.BatteryChargeStatus;
 
 			HasBattery = !status.HasFlag(BatteryChargeStatus.NoSystemBattery);
 			HasBattery &= !status.HasFlag(BatteryChargeStatus.Unknown);
+#else
+			HasBattery = false;
+#endif
 		}
 
 		private void InitializeBiosInfo()
@@ -74,6 +80,7 @@ namespace SafeExamBrowser.SystemComponents
 			var manufacturer = default(string);
 			var name = default(string);
 
+#if WINDOWS
 			try
 			{
 				using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BIOS"))
@@ -99,10 +106,14 @@ namespace SafeExamBrowser.SystemComponents
 			{
 				BiosInfo = "";
 			}
+#else
+			BiosInfo = "Linux BIOS Stub";
+#endif
 		}
 
 		private void InitializeCpuName()
 		{
+#if WINDOWS
 			try
 			{
 				using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor"))
@@ -127,6 +138,9 @@ namespace SafeExamBrowser.SystemComponents
 			{
 				CpuName = "";
 			}
+#else
+			CpuName = "Linux CPU Stub";
+#endif
 		}
 
 		private void InitializeMachineInfo()
@@ -134,6 +148,7 @@ namespace SafeExamBrowser.SystemComponents
 			var model = default(string);
 			var systemFamily = default(string);
 
+#if WINDOWS
 			try
 			{
 				using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_ComputerSystem"))
@@ -169,6 +184,11 @@ namespace SafeExamBrowser.SystemComponents
 				Model = "";
 				Name = "";
 			}
+#else
+			Manufacturer = "Linux";
+			Model = "Generic Linux Machine";
+			Name = Environment.MachineName;
+#endif
 		}
 
 		private void InitializeOperatingSystem()
@@ -237,6 +257,7 @@ namespace SafeExamBrowser.SystemComponents
 		{
 			const string UNDEFINED = "000000000000";
 
+#if WINDOWS
 			try
 			{
 				using (var searcher = new ManagementObjectSearcher("SELECT MACAddress FROM Win32_NetworkAdapterConfiguration WHERE DNSHostName IS NOT NULL"))
@@ -256,12 +277,16 @@ namespace SafeExamBrowser.SystemComponents
 			{
 				MacAddress = MacAddress ?? UNDEFINED;
 			}
+#else
+			MacAddress = UNDEFINED;
+#endif
 		}
 
 		private void InitializePnPDevices()
 		{
 			var deviceList = new List<string>();
 
+#if WINDOWS
 			try
 			{
 				using (var searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT DeviceID FROM Win32_PnPEntity"))
@@ -286,6 +311,9 @@ namespace SafeExamBrowser.SystemComponents
 			{
 				PlugAndPlayDeviceIds = deviceList.ToArray();
 			}
+#else
+			PlugAndPlayDeviceIds = Array.Empty<string>();
+#endif
 		}
 	}
 }

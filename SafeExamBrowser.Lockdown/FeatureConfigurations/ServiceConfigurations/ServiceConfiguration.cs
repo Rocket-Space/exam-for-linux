@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2026 ETH Zürich, IT Services
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -8,8 +8,12 @@
 
 using System;
 using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+#if WINDOWS
 using System.ServiceProcess;
+#endif
 using SafeExamBrowser.Lockdown.Contracts;
 using SafeExamBrowser.Logging.Contracts;
 
@@ -140,6 +144,7 @@ namespace SafeExamBrowser.Lockdown.FeatureConfigurations.ServiceConfigurations
 		{
 			var item = new ServiceDataItem { Name = name, Status = ServiceStatus.NotAvailable };
 
+#if WINDOWS
 			try
 			{
 				using (var service = new ServiceController(name))
@@ -151,6 +156,7 @@ namespace SafeExamBrowser.Lockdown.FeatureConfigurations.ServiceConfigurations
 			{
 				logger.Error($"Failed to retrieve status of service '{name}'!", e);
 			}
+#endif
 
 			return item;
 		}
@@ -184,6 +190,7 @@ namespace SafeExamBrowser.Lockdown.FeatureConfigurations.ServiceConfigurations
 		{
 			var success = false;
 
+#if WINDOWS
 			try
 			{
 				using (var service = new ServiceController(item.Name))
@@ -211,6 +218,7 @@ namespace SafeExamBrowser.Lockdown.FeatureConfigurations.ServiceConfigurations
 			{
 				logger.Error($"Failed to set service {item}!", e);
 			}
+#endif
 
 			return success;
 		}
@@ -291,6 +299,7 @@ namespace SafeExamBrowser.Lockdown.FeatureConfigurations.ServiceConfigurations
 		{
 			var available = false;
 
+#if WINDOWS
 			try
 			{
 				available = ServiceController.GetServices().Any(s => s.ServiceName == item.Name);
@@ -299,10 +308,12 @@ namespace SafeExamBrowser.Lockdown.FeatureConfigurations.ServiceConfigurations
 			{
 				logger.Error($"Failed to check whether service '{item.Name}' is available!", e);
 			}
+#endif
 
 			return available;
 		}
 
+#if WINDOWS
 		private ServiceStatus ToStatus(ServiceControllerStatus status)
 		{
 			switch (status)
@@ -315,5 +326,6 @@ namespace SafeExamBrowser.Lockdown.FeatureConfigurations.ServiceConfigurations
 					return ServiceStatus.Stopped;
 			}
 		}
+#endif
 	}
 }

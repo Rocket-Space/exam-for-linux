@@ -31,7 +31,7 @@ jobs:
 
       - name: Build .NET Core logic
         run: |
-          dotnet build SafeExamBrowser.sln --configuration Release
+          dotnet build SafeExamBrowser.Linux.sln --configuration Release
 
       - name: Build Linux Artifacts (Deb, RPM, AppImage, Flatpak)
         working-directory: ./SafeExamBrowser.Linux

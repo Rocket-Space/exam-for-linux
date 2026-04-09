@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2026 ETH Zürich, IT Services
  * 
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -66,10 +66,12 @@ namespace SafeExamBrowser.Communication.Proxies
 
 				return success;
 			}
+#if WINDOWS
 			catch (EndpointNotFoundException)
 			{
 				Logger.Warn($"Endpoint '{address}' could not be found!");
 			}
+#endif
 			catch (Exception e)
 			{
 				Logger.Error($"Failed to connect to endpoint '{address}'!", e);

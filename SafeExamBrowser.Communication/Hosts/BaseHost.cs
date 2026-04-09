@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2026 ETH Zürich, IT Services
  * 
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -20,7 +20,9 @@ namespace SafeExamBrowser.Communication.Hosts
 	/// <summary>
 	/// The base implementation of an <see cref="ICommunicationHost"/>. Runs the host on a new, separate thread.
 	/// </summary>
+#if WINDOWS
 	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
+#endif
 	public abstract class BaseHost : ICommunication, ICommunicationHost
 	{
 		private readonly object @lock = new object();
@@ -40,7 +42,11 @@ namespace SafeExamBrowser.Communication.Hosts
 			{
 				lock (@lock)
 				{
+#if WINDOWS
 					return host?.State == CommunicationState.Opened;
+#else
+					return false;
+#endif
 				}
 			}
 		}
@@ -140,7 +146,9 @@ namespace SafeExamBrowser.Communication.Hosts
 				var startedEvent = new AutoResetEvent(false);
 
 				hostThread = new Thread(() => TryStartHost(startedEvent, out exception));
+#if WINDOWS
 				hostThread.SetApartmentState(ApartmentState.STA);
+#endif
 				hostThread.IsBackground = true;
 				hostThread.Start();
 

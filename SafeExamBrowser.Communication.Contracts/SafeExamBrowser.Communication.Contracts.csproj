@@ -6,4 +6,8 @@
     <AssemblyName>SafeExamBrowser.Communication.Contracts</AssemblyName>
     <RootNamespace>SafeExamBrowser.Communication.Contracts</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ServiceModel.Primitives" Version="6.2.0" />
+  </ItemGroup>
 </Project>

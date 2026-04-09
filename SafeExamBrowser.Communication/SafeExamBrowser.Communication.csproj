@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.ServiceModel.Primitives" Version="6.2.0" />
     <ProjectReference Include="..\SafeExamBrowser.Communication.Contracts\SafeExamBrowser.Communication.Contracts.csproj" />
   </ItemGroup>
 </Project>
